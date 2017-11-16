@@ -1,0 +1,28 @@
+Package: tidyinftheo
+Type: Package
+Title: A few information-theoretic functions in the tidy style
+Version: 0.1.0
+Authors@R: c(
+    person("Andy", "Pohl", , "andy@pohl.io", c("aut", "cre")),
+    person("Pohl Data, LLC", role="cph")
+    )
+Description: Based on one or two columns of a tibble, calculate
+    Shannon Entropy, Conditional Shannon Entropy, or Mutual Information.
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Depends:
+    R (>= 3.1.0)
+Imports:
+    rlang,
+    dplyr
+Suggests:
+    knitr,
+    rmarkdown (>= 0.2.65),
+    testthat,
+    covr
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)
+URL: https://github.com/pohlio/tidyinfotheo
+BugReports: https://github.com/pohlio/tidyinfotheo/issues
