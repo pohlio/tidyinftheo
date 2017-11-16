@@ -1,10 +1,10 @@
 ---
-title: "Using tidyinfotheo"
+title: "Using tidyinftheo"
 author: "Andy Pohl"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using tidyinfotheo}
+  %\VignetteIndexEntry{Using tidyinftheo}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

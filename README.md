@@ -3,19 +3,18 @@
 tidyinftheo
 ===========
 
-[![Travis-CI Build Status](https://travis-ci.org/pohlio/tidyinfotheo.svg?branch=master)](https://travis-ci.org/pohlio/tidyinfotheo) [![codecov](https://codecov.io/gh/pohlio/tidyinfotheo/branch/master/graph/badge.svg)](https://codecov.io/gh/pohlio/tidyinfotheo)
+[![Travis-CI Build Status](https://travis-ci.org/pohlio/tidyinftheo.svg?branch=master)](https://travis-ci.org/pohlio/tidyinftheo) [![codecov](https://codecov.io/gh/pohlio/tidyinftheo/branch/master/graph/badge.svg)](https://codecov.io/gh/pohlio/tidyinftheo)
 
 You can install tidyinftheo from github with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("pohlio/tidyinfotheo")
+devtools::install_github("pohlio/tidyinftheo")
 ```
 
 Example
 -------
 
 ``` r
-#library(tidyinfotheo)
-#starwars %>% shannon_entropy(hair_color)
+library(tidyinftheo)
+starwars %>% shannon_entropy(hair_color)
 ```

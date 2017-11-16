@@ -1,10 +1,10 @@
-#' tidyinfotheo: tidy-style information theoretic routines
+#' tidyinftheo: tidy-style information theoretic routines
 #'
-#' tidyinfotheo provides an easy way to calculate shannon entropy,
+#' tidyinftheo provides an easy way to calculate shannon entropy,
 #' mutual information, etc. from fields in a 'tibble'
 #'
-#' To learn more about tidyinfotheo, start with the vignettes:
-#' `browseVignettes(package = "tidyinfotheo")`
+#' To learn more about tidyinftheo, start with the vignettes:
+#' `browseVignettes(package = "tidyinftheo")`
 #'
 #' @import dplyr
 #' @importFrom magrittr %>%
