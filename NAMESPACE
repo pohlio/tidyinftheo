@@ -3,3 +3,5 @@
 export(mutual_info)
 export(shannon_cond_entropy)
 export(shannon_entropy)
+import(dplyr)
+importFrom(magrittr,"%>%")
