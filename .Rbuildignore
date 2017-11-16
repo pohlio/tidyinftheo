@@ -4,3 +4,5 @@
 ^\.Rprofile$
 ^\.travis\.yml$
 ^codecov\.yml$
+^README\.Rmd$
+^README-.*\.png$
