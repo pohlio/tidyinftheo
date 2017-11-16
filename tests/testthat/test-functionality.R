@@ -9,18 +9,13 @@ test_that("various column selecting works with entropy",{
     expect_equal(shannon_entropy(tab, -3), answer)
 })
 
-test_that("shannon entropy works", {
-    # starwars$gender has 3 NAs
-    answer <- -1 * (19/87*log2(19/87) + 1/87*log2(1/87) +
-                    62/87*log2(62/87) + 2/87*log2(2/87) + 3/87*log2(3/87))
-    expect_equal(shannon_entropy(starwars, gender), answer)
-})
-
-test_that("shannon entropy works after removing NA", {
-    # starwars$gender has 3 NAs
-    answer <- -1 * (19/84*log2(19/84) + 1/84*log2(1/84) +
-                    62/84*log2(62/84) + 2/84*log2(2/84))
-    expect_equal(shannon_entropy(starwars, gender, na.rm=TRUE), answer)
+test_that("shannon entropy works, removing NAs", {
+    tab <- mutate(as_tibble(mtcars), am=as.character(am))
+    tab$am[13:22] <- NA
+    answer_with_NA <-    -1 * (12/32*log2(12/32) + 10/32*log2(10/32) + 10/32*log2(10/32))
+    answer_without_NA <- -1 * (12/22*log2(12/22) + 10/22*log2(10/22))
+    expect_equal(shannon_entropy(tab, am), answer_with_NA)
+    expect_equal(shannon_entropy(tab, am, na.rm=TRUE), answer_without_NA)
 })
 
 test_that("conditional shannon entropy works", {

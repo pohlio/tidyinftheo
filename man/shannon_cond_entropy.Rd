@@ -10,6 +10,8 @@ shannon_cond_entropy(tab, ..., na.rm = FALSE)
 \item{tab}{A tibble with the columns of interest}
 
 \item{...}{two columns (variables) selected}
+
+\item{na.rm}{remove all rows with NA values in at least one of the columns}
 }
 \value{
 a double with the calculated value

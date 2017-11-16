@@ -11,7 +11,9 @@ mutual_info(tab, ..., normalized = FALSE, na.rm = FALSE)
 
 \item{...}{two columns (variables) selected}
 
-\item{normalized}{if TRUE, scale to \link{0,1}}
+\item{normalized}{if TRUE, scale from 0 to 1}
+
+\item{na.rm}{remove all rows with NA values in at least one of the columns}
 }
 \value{
 a double with the calculated value

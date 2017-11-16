@@ -10,6 +10,9 @@
 #' @importFrom magrittr %>%
 "_PACKAGE"
 
+## quiets concerns of R CMD check re: the .'s that appear in pipelines
+if(getRversion() >= "2.15.1") utils::globalVariables(c(".", ".data"))
+
 #' Internal function to check the variable's type.  Information theory
 #' functions may not work as intended on doubles, so make a warning.
 #' Sometimes doubles are the unexpected column type though.
@@ -43,10 +46,12 @@ check_type <- function(tab, varname)
 #'
 #' @param tab A tibble with the column of interest
 #' @param X Name of the column
+#' @param na.rm remove all rows with NA values in at least one of the columns
 #' @return a double with the calculated value
 #' @seealso [shannon_cond_entropy]
 #'
 #' @export
+#' @importFrom rlang .data
 ## @examples (see the Entropy notebook for now)
 shannon_entropy <- function(tab, X, na.rm=FALSE)
 {
@@ -56,8 +61,9 @@ shannon_entropy <- function(tab, X, na.rm=FALSE)
         modified_tab <- modified_tab %>% filter(!is.na(!!X_sym))
     }
     modified_tab %>% group_by(!! X_sym) %>% summarize(N_X=n()) %>% ungroup() %>%
-        mutate(P_X=N_X/sum(N_X), Log_Term=-1 * P_X * ifelse(P_X>0, log2(P_X), 0)) %>%
-        summarize(H=sum(Log_Term)) %>% pull(H)
+        mutate(P_X=.data$N_X/sum(.data$N_X),
+               Log_Term=-1 * .data$P_X * ifelse(.data$P_X>0, log2(.data$P_X), 0)) %>%
+        summarize(H=sum(.data$Log_Term)) %>% pull(.data$H)
 }
 
 #' Conditional Shannon Entropy H(X|Y) i.e. "H(X given Y)"
@@ -67,8 +73,10 @@ shannon_entropy <- function(tab, X, na.rm=FALSE)
 #'
 #' @param tab A tibble with the columns of interest
 #' @param ... two columns (variables) selected
+#' @param na.rm remove all rows with NA values in at least one of the columns
 #' @return a double with the calculated value
 #' @seealso [shannon_entropy]
+#' @importFrom rlang .data
 #' @export
 shannon_cond_entropy <- function(tab, ..., na.rm=FALSE)
 {
@@ -83,12 +91,14 @@ shannon_cond_entropy <- function(tab, ..., na.rm=FALSE)
     }
     modified_tab %>% group_by(!! X_sym, !! Y_sym) %>%
         summarize(Count=n()) %>% ungroup() %>%
-        group_by(!! X_sym) %>% mutate(Sum_X = sum(Count)) %>% ungroup() %>%
-        group_by(!! Y_sym) %>% mutate(Sum_Y = sum(Count)) %>% ungroup() %>%
-        mutate(P_X=Sum_X/sum(Count), P_Y=Sum_Y/sum(Count),
-               P_X_g_Y=Count/Sum_Y, P_Y_g_X=Count/Sum_X,
-               Log_Term=-1 * P_Y * P_X_g_Y * ifelse(P_X_g_Y>0, log2(P_X_g_Y), 0)) %>%
-        group_by(!! Y_sym) %>% summarize(H=sum(Log_Term)) %>% pull(H) %>% sum()
+        group_by(!! X_sym) %>% mutate(Sum_X = sum(.data$Count)) %>% ungroup() %>%
+        group_by(!! Y_sym) %>% mutate(Sum_Y = sum(.data$Count)) %>% ungroup() %>%
+        mutate(P_X=.data$Sum_X/sum(.data$Count),
+               P_Y=.data$Sum_Y/sum(.data$Count),
+               P_X_g_Y=.data$Count/.data$Sum_Y,
+               P_Y_g_X=.data$Count/.data$Sum_X,
+               Log_Term=-1 * .data$P_Y * .data$P_X_g_Y * ifelse(.data$P_X_g_Y>0, log2(.data$P_X_g_Y), 0)) %>%
+        group_by(!! Y_sym) %>% summarize(H=sum(.data$Log_Term)) %>% pull(.data$H) %>% sum()
 }
 
 #' Mutual information MI(X;Y) = H(X) - H(X|Y) = H(Y) - H(Y|X)
@@ -98,7 +108,8 @@ shannon_cond_entropy <- function(tab, ..., na.rm=FALSE)
 #'
 #' @param tab A tibble with the column of interest
 #' @param ... two columns (variables) selected
-#' @param normalized if TRUE, scale to [0,1]
+#' @param normalized if TRUE, scale from 0 to 1
+#' @param na.rm remove all rows with NA values in at least one of the columns
 #' @return a double with the calculated value
 #' @export
 ## @examples (see the Entropy notebook for now)
@@ -124,3 +135,4 @@ mutual_info <- function(tab, ..., normalized=FALSE, na.rm=FALSE)
     }
     mi_X_Y
 }
+

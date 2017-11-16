@@ -8,12 +8,18 @@ Authors@R: c(
     )
 Description: Based on one or two columns of a tibble, calculate
     Shannon Entropy, Conditional Shannon Entropy, or Mutual Information.
-License: MIT
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
     R (>= 3.1.0)
 Imports:
+    dplyr,
+    magrittr,
+    purrr,
+    rlang,
+    tibble,
+    tidyselect,
     tidyverse
 Suggests:
     knitr,
