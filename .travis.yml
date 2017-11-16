@@ -1,8 +1,13 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-sudo: false
+sudo: required
+dist: trusty
+group: edge
 cache: packages
+
+before_install:
+- sudo apt-get update
 
 after_success:
 - Rscript -e 'covr::codecov()'
