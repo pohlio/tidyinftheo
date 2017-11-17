@@ -13,11 +13,11 @@
 ## quiets concerns of R CMD check re: the .'s that appear in pipelines
 if(getRversion() >= "2.15.1") utils::globalVariables(c(".", ".data"))
 
-#' Internal function to check the variable's type.  Information theory
-#' functions may not work as intended on doubles, so make a warning.
-#' Sometimes doubles are the unexpected column type though.
-#' @return the table with the column possibly coerced as a character
-#' @keywords internal
+## Internal function to check the variable's type.  Information theory
+## functions may not work as intended on doubles, so make a warning.
+## Sometimes doubles are the unexpected column type though.
+## @return the table with the column possibly coerced as a character
+## @keywords internal
 check_type <- function(.data, varname)
 {
     vec <- .data %>% pull(!!varname)
