@@ -52,6 +52,7 @@ check_type <- function(.data, varname)
 #'
 #' @export
 #' @importFrom rlang .data
+#' @importFrom infotheo entropy
 ## @examples (see the Entropy notebook for now)
 shannon_entropy <- function(.data, X, na.rm=FALSE)
 {
@@ -60,10 +61,9 @@ shannon_entropy <- function(.data, X, na.rm=FALSE)
     if (na.rm) {
         modified_tab <- modified_tab %>% filter(!is.na(!!X_sym))
     }
-    modified_tab %>% group_by(!! X_sym) %>% summarize(N_X=n()) %>% ungroup() %>%
-        mutate(P_X=.data$N_X/sum(.data$N_X),
-               Log_Term=-1 * .data$P_X * ifelse(.data$P_X>0, log2(.data$P_X), 0)) %>%
-        summarize(H=sum(.data$Log_Term)) %>% pull(.data$H)
+    modified_tab <-modified_tab %>% select(!!X_sym) %>% as.data.frame()
+    val <- entropy(modified_tab)
+    natstobits(val)
 }
 
 #' Conditional Shannon Entropy H(X|Y) i.e. "H(X given Y)"
