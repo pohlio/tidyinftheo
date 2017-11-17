@@ -4,10 +4,10 @@
 \alias{mutual_info_matrix}
 \title{Mutual information Matrix}
 \usage{
-mutual_info_matrix(tab, ..., normalized = FALSE, na.rm = FALSE)
+mutual_info_matrix(.data, ..., normalized = FALSE, na.rm = FALSE)
 }
 \arguments{
-\item{tab}{A tibble with the columns of interest}
+\item{.data}{A tibble with the columns of interest}
 
 \item{...}{a selection of columns, selected in the same way as \link{select}}
 

@@ -4,10 +4,10 @@
 \alias{mutual_info}
 \title{Mutual information MI(X;Y) = H(X) - H(X|Y) = H(Y) - H(Y|X)}
 \usage{
-mutual_info(tab, ..., normalized = FALSE, na.rm = FALSE)
+mutual_info(.data, ..., normalized = FALSE, na.rm = FALSE)
 }
 \arguments{
-\item{tab}{A tibble with the column of interest}
+\item{.data}{A tibble with the column of interest}
 
 \item{...}{two columns (variables) selected}
 

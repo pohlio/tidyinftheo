@@ -18,10 +18,10 @@ if(getRversion() >= "2.15.1") utils::globalVariables(c(".", ".data"))
 #' Sometimes doubles are the unexpected column type though.
 #' @return the table with the column possibly coerced as a character
 #' @keywords internal
-check_type <- function(tab, varname)
+check_type <- function(.data, varname)
 {
-    vec <- tab %>% pull(!!varname)
-    modified <- tab
+    vec <- .data %>% pull(!!varname)
+    modified <- .data
     stopifnot(purrr::is_atomic(vec) && (purrr::is_character(vec) ||
                                         purrr::is_integer(vec) ||
                                         purrr::is_logical(vec) ||
@@ -44,7 +44,7 @@ check_type <- function(tab, varname)
 #' This calculates shannon entropy of a variable in a tibble.
 #' It's assumed these columns are character typed with no NAs.
 #'
-#' @param tab A tibble with the column of interest
+#' @param .data A tibble with the column of interest
 #' @param X Name of the column
 #' @param na.rm remove all rows with NA values in at least one of the columns
 #' @return a double with the calculated value
@@ -53,10 +53,10 @@ check_type <- function(tab, varname)
 #' @export
 #' @importFrom rlang .data
 ## @examples (see the Entropy notebook for now)
-shannon_entropy <- function(tab, X, na.rm=FALSE)
+shannon_entropy <- function(.data, X, na.rm=FALSE)
 {
-    X_sym <- rlang::sym(tidyselect::vars_pull(names(tab), !! enquo(X)))
-    modified_tab <- check_type(tab, X_sym)
+    X_sym <- rlang::sym(tidyselect::vars_pull(names(.data), !! enquo(X)))
+    modified_tab <- check_type(.data, X_sym)
     if (na.rm) {
         modified_tab <- modified_tab %>% filter(!is.na(!!X_sym))
     }
@@ -71,19 +71,19 @@ shannon_entropy <- function(tab, X, na.rm=FALSE)
 #' This calculates conditional shannon entropy of two columns in a tibble.
 #' It's assumed these columns are character typed with no NAs.
 #'
-#' @param tab A tibble with the columns of interest
+#' @param .data A tibble with the columns of interest
 #' @param ... two columns (variables) selected
 #' @param na.rm remove all rows with NA values in at least one of the columns
 #' @return a double with the calculated value
 #' @seealso [shannon_entropy]
 #' @importFrom rlang .data
 #' @export
-shannon_cond_entropy <- function(tab, ..., na.rm=FALSE)
+shannon_cond_entropy <- function(.data, ..., na.rm=FALSE)
 {
-    vars <- tidyselect::vars_select(names(tab), !!!quos(...))
+    vars <- tidyselect::vars_select(names(.data), !!!quos(...))
     stopifnot(length(vars) == 2)
     X_sym <- rlang::sym(vars[1])
-    modified_tab <- check_type(tab, X_sym)
+    modified_tab <- check_type(.data, X_sym)
     Y_sym <- rlang::sym(vars[2])
     modified_tab <- check_type(modified_tab, Y_sym)
     if (na.rm) {
@@ -109,21 +109,21 @@ shannon_cond_entropy <- function(tab, ..., na.rm=FALSE)
 #' This calculates the mutual information between two variables in a tibble.
 #' (if normalized).  It's assumed these columns are character typed with no NAs.
 #'
-#' @param tab A tibble with the column of interest
+#' @param .data A tibble with the column of interest
 #' @param ... two columns (variables) selected
 #' @param normalized if TRUE, scale from 0 to 1
 #' @param na.rm remove all rows with NA values in at least one of the columns
 #' @return a double with the calculated value
 #' @export
 ## @examples (see the Entropy notebook for now)
-mutual_info <- function(tab, ..., normalized=FALSE, na.rm=FALSE)
+mutual_info <- function(.data, ..., normalized=FALSE, na.rm=FALSE)
 {
     # half of this setup code is the same as shannon_cond_entropy()
     # maybe another function is desirable for modularity
-    vars <- tidyselect::vars_select(names(tab), !!!quos(...))
+    vars <- tidyselect::vars_select(names(.data), !!!quos(...))
     stopifnot(length(vars)==2)
     X_sym <- rlang::sym(vars[1])
-    modified_tab <- check_type(tab, X_sym)
+    modified_tab <- check_type(.data, X_sym)
     Y_sym <- rlang::sym(vars[2])
     modified_tab <- check_type(modified_tab, Y_sym)
     if (na.rm) {
@@ -146,19 +146,19 @@ mutual_info <- function(tab, ..., normalized=FALSE, na.rm=FALSE)
 #' selected. If 6 variables are selected, that would yield a table with
 #' 15 rows (choose(6,2)), and 3 columns.
 #'
-#' @param tab A tibble with the columns of interest
+#' @param .data A tibble with the columns of interest
 #' @param ... a selection of columns, selected in the same way as [select]
 #' @param normalized if TRUE, scale from 0 to 1
 #' @param na.rm remove all rows with NA values in at least one of the columns
 #' @return a 3 column tibble with each pairwise combination and its calculated mutual information
 #' @export
 ## @examples (see the Entropy notebook for now)
-mutual_info_matrix <- function(tab, ..., normalized=FALSE, na.rm=FALSE)
+mutual_info_matrix <- function(.data, ..., normalized=FALSE, na.rm=FALSE)
 {
     # set up vars again.  this really should be generalzied
-    vars <- tidyselect::vars_select(names(tab), !!! quos(...))
+    vars <- tidyselect::vars_select(names(.data), !!! quos(...))
     var_syms <- rep(NULL, length(vars))
-    modified_tab <- tab
+    modified_tab <- .data
     for (v in vars) {
         var_sym <- rlang::sym(v)
         modified_tab <- check_type(modified_tab, var_sym)

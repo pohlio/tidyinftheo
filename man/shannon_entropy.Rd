@@ -4,10 +4,10 @@
 \alias{shannon_entropy}
 \title{Shannon Entropy H(X)}
 \usage{
-shannon_entropy(tab, X, na.rm = FALSE)
+shannon_entropy(.data, X, na.rm = FALSE)
 }
 \arguments{
-\item{tab}{A tibble with the column of interest}
+\item{.data}{A tibble with the column of interest}
 
 \item{X}{Name of the column}
 

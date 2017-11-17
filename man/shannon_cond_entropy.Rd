@@ -4,10 +4,10 @@
 \alias{shannon_cond_entropy}
 \title{Conditional Shannon Entropy H(X|Y) i.e. "H(X given Y)"}
 \usage{
-shannon_cond_entropy(tab, ..., na.rm = FALSE)
+shannon_cond_entropy(.data, ..., na.rm = FALSE)
 }
 \arguments{
-\item{tab}{A tibble with the columns of interest}
+\item{.data}{A tibble with the columns of interest}
 
 \item{...}{two columns (variables) selected}
 
