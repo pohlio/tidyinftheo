@@ -22,3 +22,11 @@ a double with the calculated value
 This calculates the mutual information between two variables in a tibble.
 (if normalized).  It's assumed these columns are character typed with no NAs.
 }
+\examples{
+# make an all-character version of mtchars
+mt_tib <- as_tibble(mtcars) \%>\% mutate_all(as.character)
+mutual_info(mt_tib, vs, am)
+mutual_info(mt_tib, 'am', 'vs')
+mutual_info(mt_tib, vs, am, normalized=TRUE)
+mutual_info(mt_tib, starts_with('c'))
+}

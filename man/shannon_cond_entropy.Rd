@@ -20,6 +20,14 @@ a double with the calculated value
 This calculates conditional shannon entropy of two columns in a tibble.
 It's assumed these columns are character typed with no NAs.
 }
+\examples{
+# make an all-character version of mtchars
+mt_tib <- as_tibble(mtcars) \%>\% mutate_all(as.character)
+shannon_cond_entropy(mt_tib, vs, am)
+shannon_cond_entropy(mt_tib, 'vs', 'am')
+shannon_cond_entropy(mt_tib, starts_with('c'))
+shannon_cond_entropy(mt_tib, 9:8)
+}
 \seealso{
 \link{shannon_entropy}
 }
