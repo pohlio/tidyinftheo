@@ -2,7 +2,10 @@
 title: "Using tidyinftheo"
 author: "Andy Pohl"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+    pdf_document: default
+    rmarkdown::html_vignette:
+        keep_md: true
 vignette: >
   %\VignetteIndexEntry{Using tidyinftheo}
   %\VignetteEngine{knitr::rmarkdown}
