@@ -1,0 +1,52 @@
+---
+title: "Using tidyinftheo"
+author: "Andy Pohl"
+date: "`r Sys.Date()`"
+output: 
+    pdf_document: default
+vignette: >
+  %\VignetteIndexEntry{Using tidyinftheo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This package just adds some [tidyverse](https://www.tidyverse.org/)-style enhancements to similar
+routines in the [infotheo](https://cran.r-project.org/web/packages/infotheo/index.html
+) package.  
+
+## Math
+
+Suppose we have $f(x)$ as a special case of $log_2(x)$ :
+$$
+f(x) = 
+\begin{cases} 
+   log_2(x)       & \quad \text{if } x\text{ > 0}\\
+   0  & \quad \text{if } x \text{ is 0}
+  \end{cases}
+$$
+We compute Shannon Entropy $H(X)$, as:
+$$
+H(X) = -\sum_{x\in{X}}p(x)f(x)
+$$
+with the function `shannon_entropy(.data, ..., na.rm=FALSE)`. Conditional Shannon Entropy $H(X|Y)$ as:
+$$
+H(X|Y) = -\sum_{y\in{Y}}\sum_{x\in{X}}p(x|y)f(p(x|y))
+$$
+with the `shannon_cond_entropy(.data, ..., na.rm=FALSE)` function.  These two entropy equations are enough for the equation for Mutual Information $\mathit{MI}(X;Y)$:
+$$
+\mathit{MI}(X;Y) = H(X) - H(X|Y) = H(Y) - H(Y|X)
+$$
+and the normalized version of that:
+$$
+\mathit{NMI}(X;Y) = \frac{2 \times \mathit{MI}(X;Y)}{H(X) + H(Y)}
+$$
+using the `mutual_info(.data, ..., normalized=FALSE, na.rm=FALSE)` function.
+
+

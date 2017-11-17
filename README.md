@@ -20,7 +20,7 @@ Functions
 ---------
 
 -   `shannon_entropy(.data, ..., na.rm=FALSE)`
--   `shannon_cond_entrop(.data, ..., na.rm=FALSE)`
+-   `shannon_cond_entropy(.data, ..., na.rm=FALSE)`
 -   `mutual_info(.data, ..., normalized=FALSE, na.rm=FALSE)`
 -   `mutual_info_matrix(.data, ..., normalized=FALSE, na.rm=FALSE)`
 

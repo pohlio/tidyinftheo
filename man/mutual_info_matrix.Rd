@@ -24,3 +24,8 @@ mutual information values from each pairwise combination of the variables
 selected. If 6 variables are selected, that would yield a table with
 15 rows (choose(6,2)), and 3 columns.
 }
+\examples{
+# make an all-character version of mtchars
+mt_tib <- as_tibble(mtcars) \%>\% mutate_all(as.character)
+mutual_info_matrix(mt_tib, 8:11)
+}
