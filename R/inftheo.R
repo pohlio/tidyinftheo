@@ -53,7 +53,13 @@ check_type <- function(.data, varname)
 #' @export
 #' @importFrom rlang .data
 #' @importFrom infotheo entropy
-## @examples (see the Entropy notebook for now)
+#' @importFrom tibble as_tibble
+#' @examples
+#' shannon_entropy(iris, Species)
+#' iris %>% as_tibble() %>% shannon_entropy(Species)
+#' shannon_entropy(iris, 'Species')
+#' shannon_entropy(iris, 5)
+#' shannon_entropy(iris, -1)
 shannon_entropy <- function(.data, X, na.rm=FALSE)
 {
     X_sym <- rlang::sym(tidyselect::vars_pull(names(.data), !! enquo(X)))
@@ -78,6 +84,13 @@ shannon_entropy <- function(.data, X, na.rm=FALSE)
 #' @seealso [shannon_entropy]
 #' @importFrom rlang .data
 #' @export
+#' @examples
+#' # make an all-character version of mtchars
+#' mt_tib <- as_tibble(mtcars) %>% mutate_all(as.character)
+#' shannon_cond_entropy(mt_tib, vs, am)
+#' shannon_cond_entropy(mt_tib, 'vs', 'am')
+#' shannon_cond_entropy(mt_tib, starts_with('c'))
+#' shannon_cond_entropy(mt_tib, 9:8)
 shannon_cond_entropy <- function(.data, ..., na.rm=FALSE)
 {
     vars <- tidyselect::vars_select(names(.data), !!!quos(...))
@@ -115,7 +128,13 @@ shannon_cond_entropy <- function(.data, ..., na.rm=FALSE)
 #' @param na.rm remove all rows with NA values in at least one of the columns
 #' @return a double with the calculated value
 #' @export
-## @examples (see the Entropy notebook for now)
+#' @examples
+#' # make an all-character version of mtchars
+#' mt_tib <- as_tibble(mtcars) %>% mutate_all(as.character)
+#' mutual_info(mt_tib, vs, am)
+#' mutual_info(mt_tib, 'am', 'vs')
+#' mutual_info(mt_tib, vs, am, normalized=TRUE)
+#' mutual_info(mt_tib, starts_with('c'))
 mutual_info <- function(.data, ..., normalized=FALSE, na.rm=FALSE)
 {
     # half of this setup code is the same as shannon_cond_entropy()
@@ -152,7 +171,10 @@ mutual_info <- function(.data, ..., normalized=FALSE, na.rm=FALSE)
 #' @param na.rm remove all rows with NA values in at least one of the columns
 #' @return a 3 column tibble with each pairwise combination and its calculated mutual information
 #' @export
-## @examples (see the Entropy notebook for now)
+#' @examples
+#' # make an all-character version of mtchars
+#' mt_tib <- as_tibble(mtcars) %>% mutate_all(as.character)
+#' mutual_info_matrix(mt_tib, 8:11)
 mutual_info_matrix <- function(.data, ..., normalized=FALSE, na.rm=FALSE)
 {
     # set up vars again.  this really should be generalzied

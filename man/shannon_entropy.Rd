@@ -20,6 +20,13 @@ a double with the calculated value
 This calculates shannon entropy of a variable in a tibble.
 It's assumed these columns are character typed with no NAs.
 }
+\examples{
+shannon_entropy(iris, Species)
+iris \%>\% as_tibble() \%>\% shannon_entropy(Species)
+shannon_entropy(iris, 'Species')
+shannon_entropy(iris, 5)
+shannon_entropy(iris, -1)
+}
 \seealso{
 \link{shannon_cond_entropy}
 }
