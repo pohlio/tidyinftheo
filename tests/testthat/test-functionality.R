@@ -60,3 +60,16 @@ test_that("mutual information works, NAs removed", {
     expect_equal(mutual_info(tab, am, vs, na.rm=TRUE), mutual_info(tab, vs, am, na.rm=TRUE))
 })
 
+test_that("mutual info table works", {
+    tab <- as_tibble(mtcars) %>% mutate_if(purrr::is_double, as.character)
+    tab$vs[23:25] <- NA
+    tab$am[14:17] <- NA
+    # one comparison.  we'll spot-check the matrix and check the size.
+    vs_gear <- mutual_info(tab, vs, gear)
+    cols <- 8:11
+    mi_mat <- mutual_info_matrix(tab, cols)
+    expect_equal(dim(mi_mat), c(choose(length(cols), 2), 3))
+    expect_equal(mi_mat %>%
+                filter((V1=='vs' & V2=='gear') | (V2=='vs' & (V1=='gear'))) %>%
+                select(MI) %>% pull(1), vs_gear)
+})
