@@ -9,7 +9,7 @@ shannon_cond_entropy(.data, ..., na.rm = FALSE)
 \arguments{
 \item{.data}{A tibble with the columns of interest}
 
-\item{...}{two columns (variables) selected}
+\item{...}{two columns (variables) selected (order is important)}
 
 \item{na.rm}{remove all rows with NA values in at least one of the columns}
 }

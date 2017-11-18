@@ -10,34 +10,23 @@
 #' @importFrom magrittr %>%
 "_PACKAGE"
 
-## quiets concerns of R CMD check re: the .'s that appear in pipelines
-if(getRversion() >= "2.15.1") utils::globalVariables(c(".", ".data"))
-
-## Internal function to check the variable's type.  Information theory
-## functions may not work as intended on doubles, so make a warning.
-## Sometimes doubles are the unexpected column type though.
-## @return the table with the column possibly coerced as a character
-## @keywords internal
-check_type <- function(.data, varname)
-{
-    vec <- .data %>% pull(!!varname)
-    modified <- .data
-    stopifnot(purrr::is_atomic(vec) && (purrr::is_character(vec) ||
-                                        purrr::is_integer(vec) ||
-                                        purrr::is_logical(vec) ||
-                                        purrr::is_double(vec)))
-    if (purrr::is_double(vec)) {
-        warning(call.=FALSE, paste0('converting \'',as.character(varname),
-                                    '\' from double to character'))
-        modified <- mutate(modified, varname = as.character(vec))
+# helper function
+reduce_data <- function(.data, ..., numvars=2, na.rm=FALSE) {
+    reduced_tab <- .data
+    args <- quos(...)
+    # capture empty arguments
+    stopifnot(length(args) > 0)
+    vars <- tidyselect::vars_select(names(reduced_tab), !!!quos(...))
+    stopifnot((length(vars) == numvars) || ((numvars == 0) && (length(vars) > 1)))
+    reduced_tab <- reduced_tab %>% select(vars) %>% as.data.frame()
+    if (na.rm) {
+        reduced_tab <- stats::na.omit(reduced_tab)
     }
-    else if (is.factor(vec)) {
-        # factors are kind of funny sometimes with NAs.  this might not
-        # be necessary but...
-        modified <- mutate(modified, varname = as.character(vec))
-    }
-    modified
+    reduced_tab
 }
+
+## quiets concerns of R CMD check re: the .'s that appear in pipelines
+if(getRversion() >= "2.15.1") utils::globalVariables(c(".", ".data", "V1", "V2"))
 
 #' Shannon Entropy H(X)
 #'
@@ -53,22 +42,16 @@ check_type <- function(.data, varname)
 #' @export
 #' @importFrom rlang .data
 #' @importFrom infotheo entropy
-#' @importFrom tibble as_tibble
+#' @importFrom infotheo natstobits
 #' @examples
 #' shannon_entropy(iris, Species)
 #' iris %>% as_tibble() %>% shannon_entropy(Species)
 #' shannon_entropy(iris, 'Species')
 #' shannon_entropy(iris, 5)
-#' shannon_entropy(iris, -1)
 shannon_entropy <- function(.data, X, na.rm=FALSE)
 {
-    X_sym <- rlang::sym(tidyselect::vars_pull(names(.data), !! enquo(X)))
-    modified_tab <- check_type(.data, X_sym)
-    if (na.rm) {
-        modified_tab <- modified_tab %>% filter(!is.na(!!X_sym))
-    }
-    modified_tab <-modified_tab %>% select(!!X_sym) %>% as.data.frame()
-    val <- entropy(modified_tab)
+    reduced_tab <- reduce_data(.data, !!enquo(X), numvars=1, na.rm=na.rm)
+    val <- entropy(reduced_tab)
     natstobits(val)
 }
 
@@ -78,11 +61,13 @@ shannon_entropy <- function(.data, X, na.rm=FALSE)
 #' It's assumed these columns are character typed with no NAs.
 #'
 #' @param .data A tibble with the columns of interest
-#' @param ... two columns (variables) selected
+#' @param ... two columns (variables) selected (order is important)
 #' @param na.rm remove all rows with NA values in at least one of the columns
 #' @return a double with the calculated value
 #' @seealso [shannon_entropy]
 #' @importFrom rlang .data
+#' @importFrom infotheo condentropy
+#' @importFrom infotheo natstobits
 #' @export
 #' @examples
 #' # make an all-character version of mtchars
@@ -93,28 +78,9 @@ shannon_entropy <- function(.data, X, na.rm=FALSE)
 #' shannon_cond_entropy(mt_tib, 9:8)
 shannon_cond_entropy <- function(.data, ..., na.rm=FALSE)
 {
-    vars <- tidyselect::vars_select(names(.data), !!!quos(...))
-    stopifnot(length(vars) == 2)
-    X_sym <- rlang::sym(vars[1])
-    modified_tab <- check_type(.data, X_sym)
-    Y_sym <- rlang::sym(vars[2])
-    modified_tab <- check_type(modified_tab, Y_sym)
-    if (na.rm) {
-        modified_tab <-
-            filter(modified_tab,!is.na(!!X_sym) & !is.na(!!Y_sym))
-    }
-    modified_tab %>% group_by(!!X_sym,!!Y_sym) %>%
-        summarize(Count = n()) %>% ungroup() %>%
-        group_by(!!X_sym) %>% mutate(Sum_X = sum(.data$Count)) %>% ungroup() %>%
-        group_by(!!Y_sym) %>% mutate(Sum_Y = sum(.data$Count)) %>% ungroup() %>%
-        mutate(
-            P_X = .data$Sum_X / sum(.data$Count),
-            P_Y = .data$Sum_Y / sum(.data$Count),
-            P_X_g_Y = .data$Count / .data$Sum_Y,
-            P_Y_g_X = .data$Count / .data$Sum_X,
-            Log_Term = -1 * .data$P_Y * .data$P_X_g_Y * ifelse(.data$P_X_g_Y > 0, log2(.data$P_X_g_Y), 0)
-        ) %>%
-        group_by(!!Y_sym) %>% summarize(H = sum(.data$Log_Term)) %>% pull(.data$H) %>% sum()
+    reduced_tab <- reduce_data(.data, !!!quos(...), numvars=2, na.rm=na.rm)
+    val <- condentropy(reduced_tab[,1], reduced_tab[,2])
+    natstobits(val)
 }
 
 #' Mutual information MI(X;Y) = H(X) - H(X|Y) = H(Y) - H(Y|X)
@@ -127,6 +93,9 @@ shannon_cond_entropy <- function(.data, ..., na.rm=FALSE)
 #' @param normalized if TRUE, scale from 0 to 1
 #' @param na.rm remove all rows with NA values in at least one of the columns
 #' @return a double with the calculated value
+#' @importFrom infotheo entropy
+#' @importFrom infotheo condentropy
+#' @importFrom infotheo natstobits
 #' @export
 #' @examples
 #' # make an all-character version of mtchars
@@ -137,25 +106,17 @@ shannon_cond_entropy <- function(.data, ..., na.rm=FALSE)
 #' mutual_info(mt_tib, starts_with('c'))
 mutual_info <- function(.data, ..., normalized=FALSE, na.rm=FALSE)
 {
-    # half of this setup code is the same as shannon_cond_entropy()
-    # maybe another function is desirable for modularity
-    vars <- tidyselect::vars_select(names(.data), !!!quos(...))
-    stopifnot(length(vars)==2)
-    X_sym <- rlang::sym(vars[1])
-    modified_tab <- check_type(.data, X_sym)
-    Y_sym <- rlang::sym(vars[2])
-    modified_tab <- check_type(modified_tab, Y_sym)
-    if (na.rm) {
-        modified_tab <- filter(modified_tab, !is.na(!!X_sym) & !is.na(!!Y_sym))
-    }
-    ent_X <- shannon_entropy(modified_tab, !!X_sym)
-    ent_X_g_Y <- shannon_cond_entropy(modified_tab, !!X_sym, !!Y_sym)
-    mi_X_Y <- ent_X - ent_X_g_Y
+    reduced_tab <- reduce_data(.data, !!!quos(...), numvars=2, na.rm=na.rm)
+    X <- reduced_tab[,1]
+    Y <- reduced_tab[,2]
+    ent_X <- natstobits(entropy(X))
+    ent_Y <- natstobits(entropy(Y))
+    ent_X_g_Y <- natstobits(condentropy(X, Y))
+    mi <- ent_X - ent_X_g_Y
     if (normalized) {
-        ent_Y <- shannon_entropy(modified_tab, !!Y_sym)
-        mi_X_Y <- 2 * mi_X_Y/(ent_X + ent_Y)
+        mi <- 2 * mi/(ent_X + ent_Y)
     }
-    mi_X_Y
+    mi
 }
 
 #' Mutual information Matrix
@@ -177,36 +138,12 @@ mutual_info <- function(.data, ..., normalized=FALSE, na.rm=FALSE)
 #' mutual_info_matrix(mt_tib, 8:11)
 mutual_info_matrix <- function(.data, ..., normalized=FALSE, na.rm=FALSE)
 {
-    # set up vars again.  this really should be generalzied
-    vars <- tidyselect::vars_select(names(.data), !!! quos(...))
-    var_syms <- rep(NULL, length(vars))
-    modified_tab <- .data
-    for (v in vars) {
-        var_sym <- rlang::sym(v)
-        modified_tab <- check_type(modified_tab, var_sym)
-        var_syms <- c(var_syms, var_sym)
-    }
-    var_chars <- as.character(var_syms)
-    combs <- utils::combn(var_chars, 2) %>% t() %>% as_tibble()
-#    print(combs)
-    combs <- bind_cols(combs, 'MI'=rep(NA, nrow(combs)))
-    if (nrow(combs) > 0) {
-        # maybe there's a nicer way without the loop, oh well
-        for (ix in 1:nrow(combs)) {
-            # umm, sometimes it feels like I'm bending over
-            # backwards for this quasiquotation stuff.
-            # I know there is probably a more elegant way.
-            v1_sym <- rlang::sym(combs[ix,1] %>% pull(1))
-            v2_sym <- rlang::sym(combs[ix,2] %>% pull(1))
-            combs[ix,3] <- mutual_info(modified_tab,
-                                       !!v1_sym,   # V1
-                                       !!v2_sym,   # V2
-                                       normalized=normalized,
-                                       na.rm=na.rm)
-        }
-    }
-    if (normalized) {
-        combs <- rename(combs, 'NMI'=.data$MI)
-    }
+    reduced_tab <- reduce_data(.data, !!!quos(...), numvars=0, na.rm=na.rm)
+    combs <- reduced_tab %>% names()
+    combs <- utils::combn(combs, 2) %>%
+        t() %>%
+        as_tibble() %>%
+        rowwise() %>%
+        mutate(MI=mutual_info(reduced_tab, V1, V2, normalized=normalized, na.rm=na.rm))
     combs
 }
