@@ -21,13 +21,14 @@ knitr::opts_chunk$set(
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/pohlio/tidyinftheo?branch=master&svg=true)](https://ci.appveyor.com/project/pohlio/tidyinftheo)
 
 ## Overview
-There already exists a great package for information theory measures, called ["infotheo"](https://cran.r-project.org/web/packages/infotheo/index.html).  **tidyinftheo** isn't meant to replace that, rather to provide some convenience to those who enjoy using ['Tidy-style'](https://tidyverse.org/) data manipulation in [R](https://cran.r-project.org/).  Some key differences is that this package:
+There already exists a great package for information theory measures, called ["infotheo"](https://cran.r-project.org/web/packages/infotheo/index.html).  **tidyinftheo** wraps around
+a few of the functions in the "infotheo" package.  ['Tidy-style'](https://tidyverse.org/) data manipulation in [R](https://cran.r-project.org/).  Some key differences is that this package:
 
 - just calculates Shannon Entropy, Conditional Shannon Entropy, Mutual Information, and Normalized Mutual Information.
 - just calculates the "emperical" versions of these measures, as opposed to estimates.
 - prefers "bits" (base-2 logs) vs ["nats"](https://en.wikipedia.org/wiki/Nat_(unit)) (natural logs).
 - includes a function for aggregating the pairwise comparison of mutual information across more than two variables, yielding a triangular matrix analogous to a [correlation matrix](http://www.statisticshowto.com/correlation-matrix/) for continuous variables.  
-- is fairly flexible about the type of the input.  Factors, integers, strings, should all work directly.  Doubles will cause a warning, but they'll be converted into strings and the calculation will proceed anyway.  
+- is fairly flexible about the type of the input.  Factors, integers, strings, should all work.  Doubles won't work.    
 
 ## Functions
 
@@ -63,13 +64,14 @@ mi_matr <- as_tibble(mtcars) %>%
 mi_matr
 ```
 The matrix is already in a convenient format to plot:
-```{r}
+```{r plot, dev='svg', fig.width=8}
 axis_names <- mtcars %>% select(cyl, vs, am, gear, carb) %>% names()
 p <- mi_matr %>%
     ggplot(aes(V1, V2)) +
     geom_tile(aes(fill=NMI), color="white") +
     scale_x_discrete(limits=axis_names[1:(length(axis_names)-1)]) +
     scale_y_discrete(limits=rev(axis_names)[1:(length(axis_names)-1)]) +
+    scale_fill_continuous(limits=c(0,0.6)) + 
     theme(axis.text.x=element_text(angle=90, hjust=1, size=12),
           axis.text.y=element_text(size=12)) +
     xlab(NULL) + ylab(NULL) + 
