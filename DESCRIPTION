@@ -1,10 +1,10 @@
 Package: tidyinftheo
 Type: Package
 Title: A few information-theoretic functions in the tidy style
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
-    person("Andy", "Pohl", , "andy@pohl.io", c("aut", "cre")),
-    person("Pohl Data, LLC", role="cph")
+    person(given="Andy", family="Pohl", email="andy@pohl.io", role=c("aut", "cre")),
+    person(given="Pohl Data, LLC", role="cph")
     )
 Description: Based on one or two columns of a tibble, calculate
     Shannon Entropy, Conditional Shannon Entropy, or Mutual Information.
@@ -19,7 +19,6 @@ Imports:
     magrittr,
     purrr,
     rlang,
-    stats,
     tibble,
     tidyselect,
     tidyverse
