@@ -12,12 +12,12 @@ test_that("wrong number of columns given", {
     expect_error(mutual_info(tab, vs, am, carb))
 })
 
-test_that("doubles give a warning", {
+test_that("doubles give an error even if coerced to character", {
     tab <- as_tibble(mtcars)
-    expect_warning(shannon_entropy(tab, mpg))
+    expect_error(shannon_entropy(tab, mpg))
 })
 
 test_that("complex-typed columns are an error", {
     tab <- tibble(x=0i ^ (-3:3))
-    expect_error(shannon_entropy(tab, x))
+    expect_warning(shannon_entropy(tab, x))
 })
