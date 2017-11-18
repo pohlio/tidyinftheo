@@ -1,5 +1,5 @@
 ---
-title: "Using tidyinftheo"
+title: "Math in tidyinftheo"
 author: "Andy Pohl"
 date: "`r Sys.Date()`"
 output: 
