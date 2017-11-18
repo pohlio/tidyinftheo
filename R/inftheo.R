@@ -10,13 +10,16 @@
 #' @importFrom magrittr %>%
 "_PACKAGE"
 
-# helper function
+## Helper function that (a) removes columns not involved in the
+## computatution, and [if desired] (b) removes rows that have an NA
 reduce_data <- function(.data, ..., numvars=2, na.rm=FALSE) {
     reduced_tab <- .data
+    # capture and check empty arguments
     args <- quos(...)
-    # capture empty arguments
     stopifnot(length(args) > 0)
     vars <- tidyselect::vars_select(names(reduced_tab), !!!quos(...))
+    # we should have only 1 or 2 (in which case numvars is set the same)
+    # or numvars is 0 and we just need two or more args
     stopifnot((length(vars) == numvars) || ((numvars == 0) && (length(vars) > 1)))
     reduced_tab <- reduced_tab %>% select(vars) %>% as.data.frame()
     if (na.rm) {
