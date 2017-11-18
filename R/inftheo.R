@@ -110,10 +110,10 @@ mutual_info <- function(.data, ..., normalized=FALSE, na.rm=FALSE)
     X <- reduced_tab[,1]
     Y <- reduced_tab[,2]
     ent_X <- natstobits(entropy(X))
-    ent_Y <- natstobits(entropy(Y))
     ent_X_g_Y <- natstobits(condentropy(X, Y))
     mi <- ent_X - ent_X_g_Y
     if (normalized) {
+        ent_Y <- natstobits(entropy(Y))
         mi <- 2 * mi/(ent_X + ent_Y)
     }
     mi
