@@ -6,4 +6,5 @@
 ^codecov\.yml$
 ^README\.Rmd$
 ^README-.*\.png$
+^README-.*\.svg$
 ^appveyor\.yml$
