@@ -41,7 +41,8 @@ Calculate (in bits) the Shannon Entropy of the eye color variable in the `starwa
 ``` r
 library(tidyinftheo)
 starwars %>% shannon_entropy(eye_color)
-#> [1] 3.117176
+#> Warning in data.matrix(X): NAs introduced by coercion
+#> [1] NaN
 ```
 
 With the classic `mtcars` dataset, choose some columns to make a matrix of mutual information pairwise comparisons. In particular, the *cyl*, *vs*, *am*, *gear*, and *carb* columns are all whole numbers indicating they belong to a category. The other columns are continuous and are better suited to correlation comparisons, unless they're discretized. Here are the first few rows of **mtcars**:
@@ -68,7 +69,7 @@ mi_matr <- as_tibble(mtcars) %>%
 mi_matr
 ```
 
-| V1   | V2   |        NMI|
+| V1   | V2   |         MI|
 |:-----|:-----|----------:|
 | cyl  | vs   |  0.4937932|
 | cyl  | am   |  0.1672528|
@@ -87,7 +88,7 @@ The matrix is already in a convenient format to plot:
 axis_names <- mtcars %>% select(cyl, vs, am, gear, carb) %>% names()
 p <- mi_matr %>%
     ggplot(aes(V1, V2)) +
-    geom_tile(aes(fill=NMI), color="white") +
+    geom_tile(aes(fill=MI), color="white") +
     scale_x_discrete(limits=axis_names[1:(length(axis_names)-1)]) +
     scale_y_discrete(limits=rev(axis_names)[1:(length(axis_names)-1)]) +
     scale_fill_continuous(limits=c(0,0.6)) + 
