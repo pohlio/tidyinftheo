@@ -41,8 +41,7 @@ Calculate (in bits) the Shannon Entropy of the eye color variable in the `starwa
 ``` r
 library(tidyinftheo)
 starwars %>% shannon_entropy(eye_color)
-#> Warning in data.matrix(X): NAs introduced by coercion
-#> [1] NaN
+#> [1] 3.117176
 ```
 
 With the classic `mtcars` dataset, choose some columns to make a matrix of mutual information pairwise comparisons. In particular, the *cyl*, *vs*, *am*, *gear*, and *carb* columns are all whole numbers indicating they belong to a category. The other columns are continuous and are better suited to correlation comparisons, unless they're discretized. Here are the first few rows of **mtcars**:
