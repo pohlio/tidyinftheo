@@ -68,7 +68,7 @@ mi_matr <- as_tibble(mtcars) %>%
 mi_matr
 ```
 
-| V1   | V2   |        NMI|
+| V1   | V2   |         MI|
 |:-----|:-----|----------:|
 | cyl  | vs   |  0.4937932|
 | cyl  | am   |  0.1672528|
@@ -87,7 +87,7 @@ The matrix is already in a convenient format to plot:
 axis_names <- mtcars %>% select(cyl, vs, am, gear, carb) %>% names()
 p <- mi_matr %>%
     ggplot(aes(V1, V2)) +
-    geom_tile(aes(fill=NMI), color="white") +
+    geom_tile(aes(fill=MI), color="white") +
     scale_x_discrete(limits=axis_names[1:(length(axis_names)-1)]) +
     scale_y_discrete(limits=rev(axis_names)[1:(length(axis_names)-1)]) +
     scale_fill_continuous(limits=c(0,0.6)) + 
