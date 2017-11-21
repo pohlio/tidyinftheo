@@ -23,6 +23,7 @@ Functions
 -   `shannon_cond_entropy(.data, ..., na.rm=FALSE)`
 -   `mutual_info(.data, ..., normalized=FALSE, na.rm=FALSE)`
 -   `mutual_info_matrix(.data, ..., normalized=FALSE, na.rm=FALSE)`
+-   `mutual_info_heatmap(mi_matrix, title=NULL, font_sizes=c(12,12))`
 
 Installation
 ------------
@@ -33,13 +34,18 @@ You can install tidyinftheo from github with:
 devtools::install_github("pohlio/tidyinftheo")
 ```
 
+then load:
+
+``` r
+library(tidyinftheo)
+```
+
 Examples
 --------
 
 Calculate (in bits) the Shannon Entropy of the eye color variable in the `starwars` dataset:
 
 ``` r
-library(tidyinftheo)
 starwars %>% shannon_entropy(eye_color)
 #> [1] 3.117176
 ```
@@ -84,17 +90,7 @@ mi_matr
 The matrix is already in a convenient format to plot:
 
 ``` r
-axis_names <- mtcars %>% select(cyl, vs, am, gear, carb) %>% names()
-p <- mi_matr %>%
-    ggplot(aes(V1, V2)) +
-    geom_tile(aes(fill=MI), color="white") +
-    scale_x_discrete(limits=axis_names[1:(length(axis_names)-1)]) +
-    scale_y_discrete(limits=rev(axis_names)[1:(length(axis_names)-1)]) +
-    scale_fill_continuous(limits=c(0,0.6)) + 
-    theme(axis.text.x=element_text(angle=90, hjust=1, size=12),
-          axis.text.y=element_text(size=12)) +
-    xlab(NULL) + ylab(NULL) + 
-    ggtitle("mtcars mutual information comparisons")
+p <- mutual_info_heatmap(mi_matr)
 print(p)
 ```
 
