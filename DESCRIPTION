@@ -1,6 +1,6 @@
 Package: tidyinftheo
 Type: Package
-Title: A few information-theoretic functions in the 'Tidy' style.
+Title: A few information-theoretic functions in the 'Tidy' style
 Version: 0.2.0
 Authors@R: c(
     person(given="Andy", family="Pohl", email="andy@pohl.io", role=c("aut", "cre")),
