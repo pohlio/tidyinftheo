@@ -1,13 +1,14 @@
 Package: tidyinftheo
 Type: Package
-Title: A few information-theoretic functions in the tidy style
-Version: 0.1.1
+Title: A few information-theoretic functions in the 'Tidy' style.
+Version: 0.2.0
 Authors@R: c(
     person(given="Andy", family="Pohl", email="andy@pohl.io", role=c("aut", "cre")),
     person(given="Pohl Data, LLC", role="cph")
     )
-Description: Based on one or two columns of a tibble, calculate
-    Shannon Entropy, Conditional Shannon Entropy, or Mutual Information.
+Description: A simple frontend to some of the 'infotheo' package.  Based on one or two columns of a tibble 
+    or dataframe, calculate Shannon Entropy, Conditional Shannon Entropy, or Mutual Information.  Also
+    provides a convenient heatmap to compare more than two columns.
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
