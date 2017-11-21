@@ -16,8 +16,27 @@
 #' p
 mutual_info_heatmap <- function(mi_matrix, title=NULL, font_sizes=c(12,12))
 {
+    if (ncol(mi_matrix) != 3) {
+        stop("mi_matrix doesn't have 3 columns")
+    }
+    if (!all(colnames(mi_matrix)==c('V1','V2','MI')) ||
+        !is.character(mi_matrix$V1) ||
+        !is.character(mi_matrix$V2) ||
+        !purrr::is_double(mi_matrix$MI)) {
+        stop("mi_matrix has unexpected columns")
+    }
     axis_names <- unique(c(mi_matrix$V1, mi_matrix$V2))
-    ggplot(data=mi_matrix, aes(V1, V2)) +
+    recomb <- utils::combn(axis_names, 2) %>% t() %>% as_tibble()
+    if (nrow(recomb) != nrow(mi_matrix)) {
+        stop(paste0('mi_matrix should have ',nrow(recomb), 'rows'))
+    }
+    bigset1 <- c(paste0(recomb$V1,'|',recomb$V2),paste0(recomb$V2,'|',recomb$V1))
+    bigset2 <- c(paste0(mi_matrix$V1,'|',mi_matrix$V2),paste0(mi_matrix$V2,'|',mi_matrix$V1))
+    # they can be in different orders
+    if (!(setequal(bigset1,bigset2))) {
+        stop(paste0('combinations expected in mi_matrix not seen'))
+    }
+    p <- ggplot(data=mi_matrix, aes(V1, V2)) +
         geom_tile(aes(fill=MI), color="white") +
         scale_x_discrete(limits=axis_names[1:(length(axis_names)-1)]) +
         scale_y_discrete(limits=rev(axis_names)[1:(length(axis_names)-1)]) +
@@ -26,4 +45,5 @@ mutual_info_heatmap <- function(mi_matrix, title=NULL, font_sizes=c(12,12))
               axis.text.y=element_text(size=font_sizes[2])) +
         xlab(NULL) + ylab(NULL) +
         ggtitle(title)
+    p
 }
