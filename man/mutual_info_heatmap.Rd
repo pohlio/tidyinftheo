@@ -4,15 +4,10 @@
 \alias{mutual_info_heatmap}
 \title{Plot heatmap of mutual infos}
 \usage{
-mutual_info_heatmap(mi_matrix, xlabel = NULL, ylabel = NULL, title = NULL,
-  font_sizes = c(12, 12))
+mutual_info_heatmap(mi_matrix, title = NULL, font_sizes = c(12, 12))
 }
 \arguments{
 \item{mi_matrix}{a table produced from \link{mutual_info_matrix}}
-
-\item{xlabel}{x-axis label}
-
-\item{ylabel}{y-axis label}
 
 \item{title}{title of plot}
 
@@ -28,6 +23,7 @@ Given a matrix produced from mutual_info_matrix(), plot a heatmap with ggplot2
 p <- mtcars \%>\%
    mutual_info_matrix(cyl, vs, am, gear, carb, normalized=TRUE) \%>\%
    mutual_info_heatmap()
+p
 }
 \seealso{
 \link{mutual_info_matrix}
