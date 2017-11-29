@@ -8,7 +8,7 @@ tidyinftheo
 Overview
 --------
 
-There already exists a great package for information theory measures, called ["infotheo"](https://cran.r-project.org/web/packages/infotheo/index.html). **tidyinftheo** wraps around a few of the functions in the "infotheo" package. ['Tidy-style'](https://tidyverse.org/) data manipulation in [R](https://cran.r-project.org/). Some key differences is that this package:
+There already exists a great package for information theory measures (Cover and Thomas 2001), called ["infotheo"](https://cran.r-project.org/web/packages/infotheo/index.html) (Meyer 2014). **tidyinftheo** wraps around a few of the functions in the "infotheo" package. ['Tidy-style'](https://tidyverse.org/) data manipulation in [R](https://cran.r-project.org/). Some key differences is that this package:
 
 -   just calculates Shannon Entropy, Conditional Shannon Entropy, Mutual Information, and Normalized Mutual Information.
 -   just calculates the "emperical" versions of these measures, as opposed to estimates.
@@ -94,4 +94,15 @@ p <- mutual_info_heatmap(mi_matr)
 print(p)
 ```
 
-![](README-plot-1.svg)
+<!-- This is annoying, but the auto-generated .svg needs to be in a subdir to be CRAN compliant
+     e.g. https://github.com/rstudio/sparklyr/issues/548  -->
+![](tools/README-plot-1.svg)
+
+NOTE: *The above SVG may or may not render 100% correctly. Sometimes the legend lacks the color swatch. This may be a problem with `ggplot2` or web browsers*.
+
+References
+----------
+
+Cover, Thomas M., and Joy A. Thomas. 2001. *Elements of Information Theory*. 2nd ed. 10th Ser. New York, NY: John Wiley & Sons, Inc.
+
+Meyer, Patrick E. 2014. *Infotheo: Information-Theoretic Measures*. <https://CRAN.R-project.org/package=infotheo>.

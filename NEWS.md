@@ -1,6 +1,11 @@
+# tidyinftheo 0.2.1
+
+* Edits for CRAN compliance.
+* References added.
+
 # tidyinftheo 0.2.0
 
-* heatmap function added.
+* Heatmap function added.
 
 # tidyinftheo 0.1.2
 
