@@ -71,7 +71,11 @@ mi_matr <- as_tibble(mtcars) %>%
 mi_matr
 ```
 The matrix is already in a convenient format to plot:
-```{r plot, dev='svg', fig.width=8}
+```R
 p <- mutual_info_heatmap(mi_matr)
 print(p)
 ```
+<!-- This is annoying, but the auto-generated .svg needs to be in a subdir to be CRAN compliant
+     e.g. https://github.com/rstudio/sparklyr/issues/548  -->
+![](tools/README-plot-1.svg)
+

@@ -94,4 +94,4 @@ p <- mutual_info_heatmap(mi_matr)
 print(p)
 ```
 
-![](README-plot-1.svg)
+![figure](tools/README-plot-1.svg)
