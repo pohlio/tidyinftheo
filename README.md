@@ -34,7 +34,7 @@ You can install, the traditional way, from [CRAN](https://cran.r-project.org/) w
 install.packages("tidyinftheo")
 ```
 
-or install from [GitHub](https://github.com/pohlio/tidyinftheo) with:
+or if you have the [`devtools`](https://www.rstudio.com/products/rpackages/devtools/) package installed, install `tidyinftheo` from [GitHub](https://github.com/pohlio/tidyinftheo) with:
 
 ``` r
 devtools::install_github("pohlio/tidyinftheo")
