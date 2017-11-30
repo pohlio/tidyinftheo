@@ -6,7 +6,7 @@ Authors@R: c(
     person(given="Andy", family="Pohl", email="andy@pohl.io", role=c("aut", "cre")),
     person(given="Pohl Data, LLC", role="cph")
     )
-Description: A frontend to the Shannon entropy, conditiona Shannon entropy,
+Description: A frontend to the Shannon entropy, conditional Shannon entropy,
     and mutual information calculations provided by the 'infotheo' package.  See 
     Cover and Thomas (2001) <doi:10.1002/0471200611> for an explanation of these
     measures.  Also provides a convenient heatmap to compare more than two columns
