@@ -40,8 +40,11 @@ a few of the functions in the "infotheo" package.  ['Tidy-style'](https://tidyve
 - `mutual_info_heatmap(mi_matrix, title=NULL, font_sizes=c(12,12))`
 
 ## Installation
-You can install tidyinftheo from github with:
-
+You can install, the traditional way, from [CRAN](https://cran.r-project.org/) with:
+```R
+install.packages("tidyinftheo")
+```
+or install from [GitHub](https://github.com/pohlio/tidyinftheo) with:
 ```R
 devtools::install_github("pohlio/tidyinftheo")
 ```
@@ -52,6 +55,7 @@ library(tidyinftheo)
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, error=FALSE}
 devtools::load_all()
 ```
+The GitHub version should still be stable, and may in fact be the same version as CRAN.  Unstable, in-development versions of the package with experimental features will be on other branches of this repository, most notably [the `dev` branch](https://github.com/pohlio/tidyinftheo/tree/dev).  Using branches other than `master` is not recommended unless perhaps you're interested in contributing new features or fixes to the package.  
 
 ## Examples
 
