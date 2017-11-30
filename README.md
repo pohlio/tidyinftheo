@@ -28,7 +28,13 @@ Functions
 Installation
 ------------
 
-You can install tidyinftheo from github with:
+You can install, the traditional way, from [CRAN](https://cran.r-project.org/) with:
+
+``` r
+install.packages("tidyinftheo")
+```
+
+or install from [GitHub](https://github.com/pohlio/tidyinftheo) with:
 
 ``` r
 devtools::install_github("pohlio/tidyinftheo")
@@ -39,6 +45,8 @@ then load:
 ``` r
 library(tidyinftheo)
 ```
+
+The GitHub version should still be stable, and may in fact be the same version as CRAN. Unstable, in-development versions of the package with experimental features will be on other branches of this repository, most notably [the `dev` branch](https://github.com/pohlio/tidyinftheo/tree/dev). Using branches other than `master` is not recommended unless perhaps you're interested in contributing new features or fixes to the package.
 
 Examples
 --------
