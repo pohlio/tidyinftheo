@@ -8,6 +8,7 @@ vignette: >
   %\VignetteIndexEntry{Using tidyinftheo}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
 ---
 
 ```{r setup, include = FALSE}
@@ -18,8 +19,8 @@ knitr::opts_chunk$set(
 ```
 
 This package just adds some [tidyverse](https://www.tidyverse.org/)-style enhancements to similar
-routines in the [infotheo](https://cran.r-project.org/web/packages/infotheo/index.html
-) package.  
+routines in the [`infotheo`](https://cran.r-project.org/web/packages/infotheo/index.html
+) package [@infotheopackage].  
 
 ## Math
 
@@ -47,6 +48,6 @@ and the normalized version of that:
 $$
 \mathit{NMI}(X;Y) = \frac{2 \times \mathit{MI}(X;Y)}{H(X) + H(Y)}
 $$
-using the `mutual_info(.data, ..., normalized=FALSE, na.rm=FALSE)` function.
+using the `mutual_info(.data, ..., normalized=FALSE, na.rm=FALSE)` function.  See *Elements of Information Theory* [@coverthomas] for a thorough explanation of the mathematics.  Also, see the `infotheo` package [@infotheopackage] if additional measures or functionality is needed.
 
-
+## References

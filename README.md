@@ -8,7 +8,7 @@ tidyinftheo
 Overview
 --------
 
-There already exists a great package for information theory measures, called ["infotheo"](https://cran.r-project.org/web/packages/infotheo/index.html). **tidyinftheo** wraps around a few of the functions in the "infotheo" package. ['Tidy-style'](https://tidyverse.org/) data manipulation in [R](https://cran.r-project.org/). Some key differences is that this package:
+There already exists a great package for information theory measures (Cover and Thomas 2001), called ["infotheo"](https://cran.r-project.org/web/packages/infotheo/index.html) (Meyer 2014). **tidyinftheo** wraps around a few of the functions in the "infotheo" package. ['Tidy-style'](https://tidyverse.org/) data manipulation in [R](https://cran.r-project.org/). Some key differences is that this package:
 
 -   just calculates Shannon Entropy, Conditional Shannon Entropy, Mutual Information, and Normalized Mutual Information.
 -   just calculates the "emperical" versions of these measures, as opposed to estimates.
@@ -23,6 +23,7 @@ Functions
 -   `shannon_cond_entropy(.data, ..., na.rm=FALSE)`
 -   `mutual_info(.data, ..., normalized=FALSE, na.rm=FALSE)`
 -   `mutual_info_matrix(.data, ..., normalized=FALSE, na.rm=FALSE)`
+-   `mutual_info_heatmap(mi_matrix, title=NULL, font_sizes=c(12,12))`
 
 Installation
 ------------
@@ -33,13 +34,18 @@ You can install tidyinftheo from github with:
 devtools::install_github("pohlio/tidyinftheo")
 ```
 
+then load:
+
+``` r
+library(tidyinftheo)
+```
+
 Examples
 --------
 
 Calculate (in bits) the Shannon Entropy of the eye color variable in the `starwars` dataset:
 
 ``` r
-library(tidyinftheo)
 starwars %>% shannon_entropy(eye_color)
 #> [1] 3.117176
 ```
@@ -84,18 +90,19 @@ mi_matr
 The matrix is already in a convenient format to plot:
 
 ``` r
-axis_names <- mtcars %>% select(cyl, vs, am, gear, carb) %>% names()
-p <- mi_matr %>%
-    ggplot(aes(V1, V2)) +
-    geom_tile(aes(fill=MI), color="white") +
-    scale_x_discrete(limits=axis_names[1:(length(axis_names)-1)]) +
-    scale_y_discrete(limits=rev(axis_names)[1:(length(axis_names)-1)]) +
-    scale_fill_continuous(limits=c(0,0.6)) + 
-    theme(axis.text.x=element_text(angle=90, hjust=1, size=12),
-          axis.text.y=element_text(size=12)) +
-    xlab(NULL) + ylab(NULL) + 
-    ggtitle("mtcars mutual information comparisons")
+p <- mutual_info_heatmap(mi_matr)
 print(p)
 ```
 
-![](README-plot-1.svg)
+<!-- This is annoying, but the auto-generated .svg needs to be in a subdir to be CRAN compliant
+     e.g. https://github.com/rstudio/sparklyr/issues/548  -->
+![](tools/README-plot-1.svg)
+
+NOTE: *The above SVG may or may not render 100% correctly. Sometimes the legend lacks the color swatch. This may be a problem with `ggplot2` or web browsers*.
+
+References
+----------
+
+Cover, Thomas M., and Joy A. Thomas. 2001. *Elements of Information Theory*. 2nd ed. 10th Ser. New York, NY: John Wiley & Sons, Inc.
+
+Meyer, Patrick E. 2014. *Infotheo: Information-Theoretic Measures*. <https://CRAN.R-project.org/package=infotheo>.

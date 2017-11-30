@@ -2,6 +2,7 @@
 output: 
     github_document:
         df_print: kable
+bibliography: vignettes/references.bib
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -21,7 +22,7 @@ knitr::opts_chunk$set(
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/pohlio/tidyinftheo?branch=master&svg=true)](https://ci.appveyor.com/project/pohlio/tidyinftheo)
 
 ## Overview
-There already exists a great package for information theory measures, called ["infotheo"](https://cran.r-project.org/web/packages/infotheo/index.html).  **tidyinftheo** wraps around
+There already exists a great package for information theory measures [@coverthomas], called ["infotheo"](https://cran.r-project.org/web/packages/infotheo/index.html) [@infotheopackage].  **tidyinftheo** wraps around
 a few of the functions in the "infotheo" package.  ['Tidy-style'](https://tidyverse.org/) data manipulation in [R](https://cran.r-project.org/).  Some key differences is that this package:
 
 - just calculates Shannon Entropy, Conditional Shannon Entropy, Mutual Information, and Normalized Mutual Information.
@@ -36,6 +37,7 @@ a few of the functions in the "infotheo" package.  ['Tidy-style'](https://tidyve
 - `shannon_cond_entropy(.data, ..., na.rm=FALSE)`
 - `mutual_info(.data, ..., normalized=FALSE, na.rm=FALSE)`
 - `mutual_info_matrix(.data, ..., normalized=FALSE, na.rm=FALSE)`
+- `mutual_info_heatmap(mi_matrix, title=NULL, font_sizes=c(12,12))`
 
 ## Installation
 You can install tidyinftheo from github with:
@@ -43,12 +45,18 @@ You can install tidyinftheo from github with:
 ```R
 devtools::install_github("pohlio/tidyinftheo")
 ```
+then load:
+```R
+library(tidyinftheo)
+```
+```{r, echo=FALSE, message=FALSE, warning=FALSE, error=FALSE}
+devtools::load_all()
+```
 
 ## Examples
 
 Calculate (in bits) the Shannon Entropy of the eye color variable in the `starwars` dataset:
 ```{r}
-library(tidyinftheo)
 starwars %>% shannon_entropy(eye_color)
 ```
 With the classic `mtcars` dataset, choose some columns to make a matrix of mutual information pairwise comparisons.  In particular, the *cyl*, *vs*, *am*, *gear*, and *carb* columns are all whole numbers indicating they belong to a category.  The other columns are continuous and are better suited to correlation comparisons, unless they're discretized.  Here are the first few rows of **mtcars**:
@@ -64,17 +72,14 @@ mi_matr <- as_tibble(mtcars) %>%
 mi_matr
 ```
 The matrix is already in a convenient format to plot:
-```{r plot, dev='svg', fig.width=8}
-axis_names <- mtcars %>% select(cyl, vs, am, gear, carb) %>% names()
-p <- mi_matr %>%
-    ggplot(aes(V1, V2)) +
-    geom_tile(aes(fill=MI), color="white") +
-    scale_x_discrete(limits=axis_names[1:(length(axis_names)-1)]) +
-    scale_y_discrete(limits=rev(axis_names)[1:(length(axis_names)-1)]) +
-    scale_fill_continuous(limits=c(0,0.6)) + 
-    theme(axis.text.x=element_text(angle=90, hjust=1, size=12),
-          axis.text.y=element_text(size=12)) +
-    xlab(NULL) + ylab(NULL) + 
-    ggtitle("mtcars mutual information comparisons")
+```R
+p <- mutual_info_heatmap(mi_matr)
 print(p)
 ```
+<!-- This is annoying, but the auto-generated .svg needs to be in a subdir to be CRAN compliant
+     e.g. https://github.com/rstudio/sparklyr/issues/548  -->
+![](tools/README-plot-1.svg)
+
+NOTE: *The above SVG may or may not render 100% correctly.  Sometimes the legend lacks the color swatch.  This may be a problem with `ggplot2` or web browsers*.  
+
+## References

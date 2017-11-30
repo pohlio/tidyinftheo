@@ -1,3 +1,12 @@
+# tidyinftheo 0.2.1
+
+* Edits for CRAN compliance.
+* References added.
+
+# tidyinftheo 0.2.0
+
+* Heatmap function added.
+
 # tidyinftheo 0.1.2
 
 * Unbelievably stupid bug fixed in the first README example producing an error.  Was:
