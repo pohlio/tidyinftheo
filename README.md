@@ -3,7 +3,7 @@
 tidyinftheo
 ===========
 
-[![Travis-CI Build Status](https://travis-ci.org/pohlio/tidyinftheo.svg?branch=master)](https://travis-ci.org/pohlio/tidyinftheo) [![codecov](https://codecov.io/gh/pohlio/tidyinftheo/branch/master/graph/badge.svg)](https://codecov.io/gh/pohlio/tidyinftheo) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/pohlio/tidyinftheo?branch=master&svg=true)](https://ci.appveyor.com/project/pohlio/tidyinftheo)
+[![Travis-CI Build Status](https://travis-ci.org/pohlio/tidyinftheo.svg?branch=master)](https://travis-ci.org/pohlio/tidyinftheo) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/pohlio/tidyinftheo?branch=master&svg=true)](https://ci.appveyor.com/project/pohlio/tidyinftheo) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/tidyinftheo)](https://cran.r-project.org/package=tidyinftheo) [![codecov](https://codecov.io/gh/pohlio/tidyinftheo/branch/master/graph/badge.svg)](https://codecov.io/gh/pohlio/tidyinftheo)
 
 Overview
 --------
@@ -106,7 +106,7 @@ print(p)
      e.g. https://github.com/rstudio/sparklyr/issues/548  -->
 ![](tools/README-plot-1.svg)
 
-NOTE: *The above SVG may or may not render 100% correctly. Sometimes the legend lacks the color swatch. This may be a problem with `ggplot2` or web browsers*.
+NOTE: *The above SVG may or may not render 100% correctly. [See the issue](https://github.com/pohlio/tidyinftheo/issues/1) for more discussion.*
 
 References
 ----------
